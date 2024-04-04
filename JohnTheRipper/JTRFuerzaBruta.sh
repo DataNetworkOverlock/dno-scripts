@@ -1,25 +1,37 @@
 #!/bin/bash
 
-url="$1"
+# Generar variable
+mnsj="$1"
 
-# Crear archivo .txt con el contenido del parámetro
-echo $url > JTRFuerzaBruta.txt
+#Guarda el tiempo actual en una variable
+get_seconds(){
+        echo $(date '+%s')
+}
+start_time=$(get_seconds)
 
-# Cifrar el archivo .txt usando gpg (herramienta por default en Ubuntu)
-gpg -c JTRFuerzaBruta.txt
+# Crear archivo .txt con el contenido del parametro
+echo "La contraseña proporcionada es: $mnsj"
+echo "$mnsj" > JTRFuerzaBruta.txt
+echo "" > JTRFuerzaBrutaCifrado.txt
 
-# Mostrar contenido del archivo cifrado en consola
-echo "Contenido del archivo cifrado:"
-cat JTRFuerzaBruta.txt.gpg
+#cifrado del archvio con openssl
+openssl enc -aes-256-cbc -salt -k "DataOverLock1*" -a -in JTRFuerzaBruta.txt -out JTRFuerzaBrutaCifra>echo "La contraseña cifrada es: "
+cat JTRFuerzaBrutaCifrado.txt
 
-# Descifrar el archivo cifrado usando John The Ripper
-john --format=gpg JTRFuerzaBruta.txt.gpg
+#Calcula el tiempo transcurrido
+end_time=$(date +%s)
+elapsed_time=$((end_time - start_time))
 
-# Mostrar contenido del archivo descifrado en consola
-echo "Contenido del archivo descifrado:"
-cat JTRFuerzaBruta.txt.gpg.out
+#mostrar el resultado del tiempo transcurrido
+echo "Tiempo de ejecucion total del script $elapsed_time"
 
-# Eliminar archivos cifrado y descifrado
-rm JTRFuerzaBruta.txt.gpg
-rm JTRFuerzaBruta.txt.gpg.out
+#Eliminar archivos creados
 rm JTRFuerzaBruta.txt
+rm JTRFuerzaBrutaCifrado.txt
+
+
+
+
+
+
+
